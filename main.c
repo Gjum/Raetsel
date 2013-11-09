@@ -1,5 +1,6 @@
 
 
+#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -87,12 +88,15 @@ void markStoneInPlace(int x, int y) {
 }
 
 // places a stone
-// if it blocks a STONE_INPLACE, marks itself as STONE_INPLACE
+// if it blocks a STONE_INPLACE
+//     or is in the bottom-left triangle,
+//     marks itself as STONE_INPLACE
 void placeStone(int x, int y, char c) {
 	setStone(x, y, c);
 	if (c == STONE_EMPTY) return;
 	if (getStone(x-1, y) == STONE_INPLACE || getStone(x, y-1) == STONE_INPLACE)
 		markStoneInPlace(x, y);
+	else if (x+y < 3) markStoneInPlace(x, y);
 }
 
 // tries to move a stone
@@ -154,11 +158,7 @@ int main(int argc, char *argv[]) {
 		else board[i] = STONE_EMPTY;
 	}
 	board[(width+1)*height-1] = '\0';
-	setStone(0, 2, STONE_INPLACE);
-	setStone(1, 2, STONE_INPLACE);
-	setStone(1, 1, STONE_INPLACE);
-	setStone(2, 1, STONE_INPLACE);
-	setStone(2, 0, STONE_INPLACE);
+	setStone(0, 0, STONE_INPLACE);
 	printBoard();
 	sleep(1);
 	// loop checks the 3 stones in the
@@ -167,16 +167,18 @@ int main(int argc, char *argv[]) {
 	// ?0???
 	// ??0??
 	while (1) {
-		int x, y;
-		for (x = 0; x < 3; x++) {
-			y = 2-x;
-			if (getStone(x, y) == STONE_INPLACE) {
-				moveStone(x, y);
-				break; // for loop
+		int a, x, y;
+		for (a = 2; a >= 0; a--) {
+			for (x = 0; x <= a; x++) {
+				y = a-x;
+				if (getStone(x, y) == STONE_INPLACE) {
+					moveStone(x, y);
+					break; // for loop
+				}
 			}
 		}
 		printBoard();
-		sleep(1);
+		usleep(100000);
 	}
 	return 0;
 }
