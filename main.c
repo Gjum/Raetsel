@@ -21,7 +21,9 @@ void error(char* msg, char *fun);
 // if it is directly next to the bottom-left border, returns STONE_EMPTY
 // if it is outside the board, exits with an error
 char getStone(int x, int y);
+
 // same, but with index instead of coordinates
+// used for looping through all cells
 char getStoneIndex(int i);
 
 // places a stone without any further actions (see placeStone)
