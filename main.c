@@ -50,7 +50,9 @@ void printBoard();
 
 // prints an error and stops the program
 void error(char* msg, char *fun) {
-	printf("\n%s (%s)\nTerminating\n", msg, fun);
+	if (fun[0] > 0)
+		printf("\n%s\nTerminating\n", msg, fun);
+	else printf("\n%s (%s)\nTerminating\n", msg);
 	printBoard();
 	exit(0);
 }
@@ -133,21 +135,39 @@ void printBoard() {
 	printf("\nstones:   %i \t%i%%\nblocking: %i \t%i%%\n", stones, 100*stones/boardsize, inplaces, 100*inplaces/boardsize);
 }
 
+// print command usage text and terminate the program
+void exitUsage(char *command) {
+	printf("Usage: %s [-b <width> <height>] [-s]\nwidth, height > 0, -s = stats on", command);
+	exit(0);
+}
+
 int main(int argc, char *argv[]) {
-	int i = 0;
-	if (argc > 1) {
-		if (argv[1][0] < '0' || argv[1][0] > '9') {
-			printf("Usage: %s <width> <height> <stats>\nwidth, height > 0, stats: 1|0", argv[0]);
-			return;
+	int i = 1;
+	// parse arguments
+	while (i < argc) {
+		if (argv[i][0] == '-') {
+			// switch
+			if (argv[i][1] == 'h') {
+				printf("Writing help\n");
+				exitUsage(argv[0]);
+			}
+			else if (argv[i][1] == 's') {
+				printf("Writing stats\n");
+				stats = 1;
+			}
+			// parameter
+			else if (argv[i][1] == 'b') {
+				printf("Setting board size\n");
+				width = atoi(argv[i+1]);
+				height = atoi(argv[i+2]);
+				i += 2;
+			}
 		}
-		width = atoi(argv[1]);
-		if (argc > 2) {
-			height = atoi(argv[2]);
+		else {
+			printf("Parse error: %s\n", argv[i]);
+			exitUsage(argv[0]);
 		}
-		if (argc > 3) {
-			stats = atoi(argv[3]);
-		}
-		if (width <= 0 || height <= 0) error("width or height invalid", "arguments");
+		i++;
 	}
 	printf("Board: %ix%i\n", width, height);
 	if (stats) printf("Stats are ON\n");

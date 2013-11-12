@@ -17,14 +17,15 @@ Objective: remove any stone from the bottom left corner, so that the remaining s
 
 Arguments
 ---------
-`[program name] <width> <height> <stats>`
-- `width`
-    - integer greater than 0
-    - Width of the board. Although the imaginary board is infinite, the computer can only handle a limited amount of it.
-- `height`
-    - integer greater than 0
-    - Height of the board. See `width`.
-- `stats`
-    - `1` or `0` for `on` or `off`
-    - Enable or disable printing statistics about the board, currently including the number of stones and blocking stones, absolute and in percent of the board.
+`[program name] [-b <width> <height>] [-s]`
+- `-b`
+    - set board size
+    - `width`
+        - integer greater than 0
+        - Width of the board. Although the imaginary board is infinite, the computer can only handle a limited amount of it.
+    - `height`
+        - integer greater than 0
+        - Height of the board. See `width`.
+- `-s`
+    - Enable printing statistics about the board, currently including the number of stones and blocking stones, absolute and in percent of the board.
 
